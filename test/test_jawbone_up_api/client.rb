@@ -100,5 +100,54 @@ module TestJawboneUPAPI
         end
       end
     end
+
+    def test_workouts_list
+      client = JawboneUPAPI::Client.new(@access_token)
+      workouts = client.workouts
+
+      refute_nil workouts.meta
+      assert_equal 'OK', workouts.meta.message
+      assert_equal 200, workouts.meta.code
+
+      refute_nil workouts.data
+      refute_nil workouts.data.items
+
+      items = workouts.data.items
+      if 0 < items.count
+        p items
+        for item in items do
+          refute_nil item.xid
+          refute_nil item.date
+          refute_nil item.title
+          refute_nil item.sub_type         # 1:walk, 2:run
+          refute_nil item.details.time
+          refute_nil item.details.calories
+        end
+      end
+    end
+
+    def test_workouts_date
+      client = JawboneUPAPI::Client.new(@access_token)
+      workouts = client.workouts('20151207')
+
+      refute_nil workouts.meta
+      assert_equal 'OK', workouts.meta.message
+      assert_equal 200, workouts.meta.code
+
+      refute_nil workouts.data
+      refute_nil workouts.data.items
+
+      items = workouts.data.items
+      if 0 < items.count
+        for item in items do
+          refute_nil item.xid
+          refute_nil item.date
+          refute_nil item.title
+          refute_nil item.sub_type
+          refute_nil item.details.time
+          refute_nil item.details.calories
+        end
+      end
+    end
   end
 end
