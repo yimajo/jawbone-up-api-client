@@ -57,7 +57,48 @@ module TestJawboneUPAPI
           refute_nil item.date
         end
       end
+    end
 
+    def test_moves_list
+      client = JawboneUPAPI::Client.new(@access_token)
+      moves = client.moves
+
+      refute_nil moves.meta
+      assert_equal 'OK', moves.meta.message
+      assert_equal 200, moves.meta.code
+
+      refute_nil moves.data
+      refute_nil moves.data.items
+
+      items = moves.data.items
+      if 0 < items.count
+        for item in items do
+          refute_nil item.xid
+          refute_nil item.date
+          refute_nil item.details.steps
+        end
+      end
+    end
+
+    def test_moves_date
+      client = JawboneUPAPI::Client.new(@access_token)
+      moves = client.moves('20151207')
+
+      refute_nil moves.meta
+      assert_equal 'OK', moves.meta.message
+      assert_equal 200, moves.meta.code
+
+      refute_nil moves.data
+      refute_nil moves.data.items
+
+      items = moves.data.items
+      if 0 < items.count
+        for item in items do
+          refute_nil item.xid
+          refute_nil item.date
+          refute_nil item.details.steps
+        end
+      end
     end
   end
 end
