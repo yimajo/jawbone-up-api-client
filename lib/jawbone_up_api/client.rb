@@ -28,6 +28,16 @@ module JawboneUPAPI
       Hashie::Mash.new(json)
     end
 
+    def moves(date = nil)
+      if date != nil
+        param = {date: date}
+      end
+      json = get_helper('users/@me/moves', param: param)
+      Hashie::Mash.new(json)
+    end
+
+    private
+
     def get_helper(path, param: nil)
       response = @conn.get("#{BASE_URL}/#{path}", param)
 
