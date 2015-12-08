@@ -28,6 +28,8 @@ module JawboneUPAPI
       Hashie::Mash.new(json)
     end
 
+    private
+
     def get_helper(path, param: nil)
       response = @conn.get("#{BASE_URL}/#{path}", param)
 
